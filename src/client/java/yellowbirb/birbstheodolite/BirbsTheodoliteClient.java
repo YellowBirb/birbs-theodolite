@@ -9,11 +9,7 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallba
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.text.Text;
-import yellowbirb.birbstheodolite.render.RenderSystem;
-import yellowbirb.birbstheodolite.render.RenderUtil;
-import yellowbirb.birbstheodolite.render.buffer.WorldBuffer;
-
-import java.awt.*;
+import yellowbirb.birbstheodolite.render.RenderUtils;
 
 public class BirbsTheodoliteClient implements ClientModInitializer {
 
@@ -26,16 +22,8 @@ public class BirbsTheodoliteClient implements ClientModInitializer {
     public void onInitializeClient() {
         instance = this;
 
-        RenderSystem.init();
-
-        WorldRenderEvents.END.register(ctx -> {
-            WorldBuffer buffer = RenderUtil.startLines(ctx);
-            RenderUtil.drawLine(buffer, 0, -50f, 0, 0, 50, 0, new Color(255, 0, 0, 255));
-            RenderUtil.endLines(buffer);
-
-            /*WorldBuffer buffer2 = RenderUtil.startTri(ctx);
-            RenderUtil.drawTri(buffer2, 0, 0, 0, 1, 1, 0, 0, 1, 0, new Color(255, 255, 0, 100));
-            RenderUtil.endTri(buffer2);*/
+        WorldRenderEvents.LAST.register(ctx -> {
+            RenderUtils.renderSingleLine(ctx, 0, -50, 0, 0, 50, 0);
         });
 
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
