@@ -14,6 +14,7 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.util.BufferAllocator;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Vec3d;
+import yellowbirb.birbstheodolite.render.shapes.RenderShape;
 
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
@@ -23,9 +24,7 @@ public class Renderer {
 
     private static final BufferAllocator allocator = new BufferAllocator(RenderLayer.CUTOUT_BUFFER_SIZE);
 
-    public void drawSingleLine(WorldRenderContext ctx, RenderPipeline pipeline,
-                               float x0, float y0, float z0, int r0, int g0, int b0, int a0,
-                               float x1, float y1, float z1, int r1, int g1, int b1, int a1) {
+    public void drawShape(WorldRenderContext ctx, RenderShape shape) {
         MatrixStack matrices = ctx.matrixStack();
         Vec3d cam = ctx.camera().getPos();
 
@@ -33,40 +32,16 @@ public class Renderer {
         matrices.push();
         matrices.translate(-cam.x, -cam.y, -cam.z);
 
-        BufferBuilder bufferBuilder = getBufferBuilder(pipeline);
+        RenderPipeline pipeline = shape.getRenderPipeline();
 
-        VertexHelper.singleLine(matrices, bufferBuilder,
-                x0, y0, z0, r0, g0, b0, a0,
-                x1, y1, z1, r1, g1, b1, a1);
+        BufferBuilder bufferBuilder =
+                new BufferBuilder(allocator, pipeline.getVertexFormatMode(), pipeline.getVertexFormat());
 
-        draw(pipeline, bufferBuilder.end());
+        shape.render(matrices, bufferBuilder);
 
-        matrices.pop();
-    }
-
-    public void drawCircleXZ(WorldRenderContext ctx, RenderPipeline pipeline,
-                             float radius, float segmentLength, float x, float y, float z,
-                             int r, int g, int b, int a) {
-        MatrixStack matrices = ctx.matrixStack();
-        Vec3d cam = ctx.camera().getPos();
-
-        assert matrices != null;
-        matrices.push();
-        matrices.translate(-cam.x, -cam.y, -cam.z);
-
-        BufferBuilder bufferBuilder = getBufferBuilder(pipeline);
-
-        VertexHelper.circleXZ_Line_Strip(matrices, bufferBuilder,
-                radius, segmentLength, x, y, z,
-                r, g, b, a);
-
-        draw(pipeline, bufferBuilder.end());
+        draw(shape.getRenderPipeline(), bufferBuilder.end());
 
         matrices.pop();
-    }
-
-    private BufferBuilder getBufferBuilder(RenderPipeline pipeline) {
-        return new BufferBuilder(allocator, pipeline.getVertexFormatMode(), pipeline.getVertexFormat());
     }
 
     private void draw(RenderPipeline pipeline, BuiltBuffer buffer) {
