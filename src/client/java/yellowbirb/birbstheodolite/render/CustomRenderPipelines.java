@@ -15,7 +15,6 @@ public class CustomRenderPipelines {
             RenderPipeline.builder(RenderPipelines.RENDERTYPE_LINES_SNIPPET)
                     .withLocation(Identifier.of(BirbsTheodoliteClient.MOD_ID, "pipeline/lines"))
                     .withVertexFormat(VertexFormats.POSITION_COLOR_NORMAL, VertexFormat.DrawMode.LINES)
-//                    .withoutBlend()
                     .withDepthTestFunction(DepthTestFunction.LEQUAL_DEPTH_TEST)
                     .build()
     );
@@ -24,7 +23,6 @@ public class CustomRenderPipelines {
             RenderPipeline.builder(RenderPipelines.RENDERTYPE_LINES_SNIPPET)
                     .withLocation(Identifier.of(BirbsTheodoliteClient.MOD_ID, "pipeline/lines_through_walls"))
                     .withVertexFormat(VertexFormats.POSITION_COLOR_NORMAL, VertexFormat.DrawMode.LINES)
-//                    .withoutBlend()
                     .withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST)
                     .build()
     );
@@ -33,7 +31,6 @@ public class CustomRenderPipelines {
             RenderPipeline.builder(RenderPipelines.RENDERTYPE_LINES_SNIPPET)
                     .withLocation(Identifier.of(BirbsTheodoliteClient.MOD_ID, "pipeline/line_strip"))
                     .withVertexFormat(VertexFormats.POSITION_COLOR_NORMAL, VertexFormat.DrawMode.LINE_STRIP)
-//                    .withoutBlend()
                     .withDepthTestFunction(DepthTestFunction.LEQUAL_DEPTH_TEST)
                     .build()
     );
@@ -42,7 +39,6 @@ public class CustomRenderPipelines {
             RenderPipeline.builder(RenderPipelines.RENDERTYPE_LINES_SNIPPET)
                     .withLocation(Identifier.of(BirbsTheodoliteClient.MOD_ID, "pipeline/line_strip_through_walls"))
                     .withVertexFormat(VertexFormats.POSITION_COLOR_NORMAL, VertexFormat.DrawMode.LINE_STRIP)
-//                    .withoutBlend()
                     .withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST)
                     .build()
     );
@@ -51,7 +47,6 @@ public class CustomRenderPipelines {
             RenderPipeline.builder(RenderPipelines.POSITION_COLOR_SNIPPET)
                     .withLocation(Identifier.of(BirbsTheodoliteClient.MOD_ID, "pipeline/triangle_strip"))
                     .withVertexFormat(VertexFormats.POSITION_COLOR, VertexFormat.DrawMode.TRIANGLE_STRIP)
-//                    .withoutBlend()
                     .withDepthTestFunction(DepthTestFunction.LEQUAL_DEPTH_TEST)
                     .build()
     );
@@ -60,7 +55,6 @@ public class CustomRenderPipelines {
             RenderPipeline.builder(RenderPipelines.POSITION_COLOR_SNIPPET)
                     .withLocation(Identifier.of(BirbsTheodoliteClient.MOD_ID, "pipeline/triangle_strip_through_walls"))
                     .withVertexFormat(VertexFormats.POSITION_COLOR, VertexFormat.DrawMode.TRIANGLE_STRIP)
-//                    .withoutBlend()
                     .withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST)
                     .build()
     );
