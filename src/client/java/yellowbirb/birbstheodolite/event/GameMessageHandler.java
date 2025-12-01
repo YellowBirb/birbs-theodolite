@@ -6,8 +6,11 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.text.*;
 import yellowbirb.birbstheodolite.render.RenderManager;
 import yellowbirb.birbstheodolite.render.shapes.CircleXZ;
+import yellowbirb.birbstheodolite.render.shapes.InterCircleStrip;
 
 import java.util.Optional;
+
+import static java.lang.Math.*;
 
 @UtilityClass
 public class GameMessageHandler {
@@ -97,13 +100,22 @@ public class GameMessageHandler {
         float playerY = (float) player.getY();
         float playerZ = (float) player.getZ();
 
-        RenderManager.add(new CircleXZ(radius1_1, 0.5f, playerX, playerY + deltaY + heightMargin, playerZ, 0, 255, 0, 255, true));
-        RenderManager.add(new CircleXZ(radius1_2, 0.5f, playerX, playerY + deltaY - heightMargin, playerZ, 0, 255, 0, 255, true));
+        int segmentAmount = max(8, (int) round((PI * max(radius1_1, max(radius1_2, max(radius2, max(radius3_1, radius3_2)))) * 2) / 0.5f));
+        float lowY = playerY + deltaY - heightMargin;
+        float highY = playerY + deltaY + heightMargin;
 
-        RenderManager.add(new CircleXZ(radius2, 0.5f, playerX, playerY + deltaY, playerZ, 255, 0, 0, 255, true));
+        RenderManager.add(new CircleXZ(radius1_1, segmentAmount, playerX, highY, playerZ, 0, 255, 0, 255, true));
+        RenderManager.add(new CircleXZ(radius1_2, segmentAmount, playerX, lowY , playerZ, 0, 255, 0, 255, true));
 
-        RenderManager.add(new CircleXZ(radius3_1, 0.5f, playerX, playerY + deltaY + heightMargin, playerZ, 0, 255, 0, 255, true));
-        RenderManager.add(new CircleXZ(radius3_2, 0.5f, playerX, playerY + deltaY - heightMargin, playerZ, 0, 255, 0, 255, true));
+        RenderManager.add(new CircleXZ(radius2, segmentAmount, playerX, playerY + deltaY, playerZ, 255, 0, 0, 255, true));
+
+        RenderManager.add(new CircleXZ(radius3_1, segmentAmount, playerX, highY, playerZ, 0, 255, 0, 255, true));
+        RenderManager.add(new CircleXZ(radius3_2, segmentAmount, playerX, lowY , playerZ, 0, 255, 0, 255, true));
+
+        RenderManager.add(new InterCircleStrip(radius1_1, radius1_2, segmentAmount, playerX, highY, lowY , playerZ, 0, 255, 0, 50, true));
+        RenderManager.add(new InterCircleStrip(radius3_1, radius3_2, segmentAmount, playerX, highY, lowY , playerZ, 0, 255, 0, 50, true));
+        RenderManager.add(new InterCircleStrip(radius1_1, radius3_1, segmentAmount, playerX, highY, highY, playerZ, 0, 255, 0, 50, true));
+        RenderManager.add(new InterCircleStrip(radius1_2, radius3_2, segmentAmount, playerX, lowY , lowY , playerZ, 0, 255, 0, 50, true));
     }
 
     private void onReceivePeltRewardMessage() {

@@ -17,10 +17,6 @@ public class BirbsTheodoliteClient implements ClientModInitializer {
         WorldRenderEvents.LAST.register(RenderManager::draw);
 
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> GameMessageHandler.incoming(message));
-        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> RenderManager.clear()); // disconnect event, test!
-
-        // for 1.0.1: draw between lines
-        // then config
-        // after config: eye level, line thickness uniform
+        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> RenderManager.clear());
     }
 }
