@@ -67,6 +67,9 @@ public class GameMessageHandler {
         int deltaY = Integer.parseInt(words[4]);
         int alpha = 90 - Integer.parseInt(words[9]);
 
+        ClientPlayerEntity player = MinecraftClient.getInstance().player;
+        assert player != null;
+
         if (alpha == 90) {
             MinecraftClient.getInstance().player.sendMessage(MutableText.of(PlainTextContent.of("§3[Birb's Theodolite] §cCannot calculate with 0 degree angle")), false);
             return;
@@ -76,24 +79,31 @@ public class GameMessageHandler {
             deltaY = -deltaY;
         }
 
+        double angleMargin = 1;
         double factor = (2 * Math.PI) / 360;
-        double alpha_rad1 = (alpha + 1.5) * factor;
-        double alpha_rad2 = alpha * factor;
-        double alpha_rad3 = (alpha - 1.5) * factor;
+        double alpha_rad = alpha * factor;
+        double margin_rad = angleMargin * factor;
 
-        float radius1 = (float) (Math.abs(Math.tan(alpha_rad1) * deltaY));
-        float radius2 = (float) (Math.abs(Math.tan(alpha_rad2) * deltaY));
-        float radius3 = (float) (Math.abs(Math.tan(alpha_rad3) * deltaY));
+        float heightMargin = 1;
+        float radius1_1 = (float) (Math.abs(Math.tan(alpha_rad + margin_rad) * (deltaY + heightMargin)));
+        float radius1_2 = (float) (Math.abs(Math.tan(alpha_rad + margin_rad) * (deltaY - heightMargin)));
 
-        ClientPlayerEntity player = MinecraftClient.getInstance().player;
-        assert player != null;
+        float radius2 = (float) (Math.abs(Math.tan(alpha_rad) * deltaY));
+
+        float radius3_1 = (float) (Math.abs(Math.tan(alpha_rad - margin_rad) * (deltaY + heightMargin)));
+        float radius3_2 = (float) (Math.abs(Math.tan(alpha_rad - margin_rad) * (deltaY - heightMargin)));
+
         float playerX = (float) player.getX();
         float playerY = (float) player.getY();
         float playerZ = (float) player.getZ();
 
-        RenderManager.add(new CircleXZ(radius1, 0.5f, playerX, playerY + deltaY, playerZ, 0, 255, 0, 255, true));
+        RenderManager.add(new CircleXZ(radius1_1, 0.5f, playerX, playerY + deltaY + heightMargin, playerZ, 0, 255, 0, 255, true));
+        RenderManager.add(new CircleXZ(radius1_2, 0.5f, playerX, playerY + deltaY - heightMargin, playerZ, 0, 255, 0, 255, true));
+
         RenderManager.add(new CircleXZ(radius2, 0.5f, playerX, playerY + deltaY, playerZ, 255, 0, 0, 255, true));
-        RenderManager.add(new CircleXZ(radius3, 0.5f, playerX, playerY + deltaY, playerZ, 0, 255, 0, 255, true));
+
+        RenderManager.add(new CircleXZ(radius3_1, 0.5f, playerX, playerY + deltaY + heightMargin, playerZ, 0, 255, 0, 255, true));
+        RenderManager.add(new CircleXZ(radius3_2, 0.5f, playerX, playerY + deltaY - heightMargin, playerZ, 0, 255, 0, 255, true));
     }
 
     private void onReceivePeltRewardMessage() {
