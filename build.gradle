@@ -34,13 +34,8 @@ dependencies {
 	//add lombok
 	compileOnly("org.projectlombok:lombok:1.18.42")
 	annotationProcessor("org.projectlombok:lombok:1.18.42")
-
 	testCompileOnly("org.projectlombok:lombok:1.18.42")
 	testAnnotationProcessor("org.projectlombok:lombok:1.18.42")
-
-	//add joml
-	//modImplementation 'org.joml:joml:1.10.4'
-	//include 'org.joml:joml:1.10.4'
 
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"

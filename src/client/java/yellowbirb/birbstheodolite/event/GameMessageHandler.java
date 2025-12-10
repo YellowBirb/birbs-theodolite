@@ -64,9 +64,10 @@ public class GameMessageHandler {
         String[] words = message.split("\\s");
 
         int deltaY = Integer.parseInt(words[4]);
-        int alpha = 90 - Integer.parseInt(words[9]);
+        double alpha = Math.toRadians(90 - Integer.parseInt(words[9]));
 
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
+        // can only be called in-game, so there must for sure be a player riiiiight
         assert player != null;
 
         if (alpha == 90) {
@@ -78,10 +79,11 @@ public class GameMessageHandler {
             deltaY = -deltaY;
         }
 
+        // in degrees
         double angleMargin = 1;
-        double factor = (2 * Math.PI) / 360;
-        double alpha_rad = alpha * factor;
-        double margin_rad = angleMargin * factor;
+        // alpharad mentioned :O
+        double alpha_rad = Math.toRadians(alpha);
+        double margin_rad = Math.toRadians(angleMargin);
 
         float heightMargin = 1;
         float radius1_1 = (float) (Math.abs(Math.tan(alpha_rad + margin_rad) * (deltaY + heightMargin)));
@@ -96,7 +98,9 @@ public class GameMessageHandler {
         float playerY = (float) player.getY();
         float playerZ = (float) player.getZ();
 
-        int segmentAmount = max(8, (int) round((PI * max(radius1_1, max(radius1_2, max(radius2, max(radius3_1, radius3_2)))) * 2) / 0.5f));
+        float segmentLength = 0.5f;
+        // resampling segmentAmount to draw clean InterCircleStrips
+        int segmentAmount = max(8, (int) round((PI * max(radius1_1, max(radius1_2, max(radius2, max(radius3_1, radius3_2)))) * 2) / segmentLength));
         float lowY = playerY + deltaY - heightMargin;
         float highY = playerY + deltaY + heightMargin;
 
