@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import yellowbirb.birbstheodolite.event.GameMessageHandler;
 import yellowbirb.birbstheodolite.render.RenderManager;
-import yellowbirb.birbstheodolite.render.shapes.Cube;
 
 import java.io.IOException;
 import java.net.URI;
@@ -69,7 +68,7 @@ public class BirbsTheodoliteClient implements ClientModInitializer {
             // get Versions from API
             String jsonString = IOUtils.toString(new URI(MODRINTH_PROJECT_VERSION_API_LINK).toURL().openStream(), StandardCharsets.UTF_8);
             JsonArray jsonArray = JsonParser.parseString(jsonString).getAsJsonArray();
-            String mcVer = SharedConstants.getGameVersion().getName();
+            String mcVer = SharedConstants.getGameVersion().name();
             String highestVer = "";
             String highestVerID = "";
 
