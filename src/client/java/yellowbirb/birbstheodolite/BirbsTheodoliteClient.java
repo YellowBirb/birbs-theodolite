@@ -84,8 +84,7 @@ public class BirbsTheodoliteClient implements ClientModInitializer {
 
     public void openMenu(MinecraftClient client) {
         client.send(() -> {
-            System.out.println("open");
-            client.setScreen(new MenuScreen(Text.literal("aaaa"), null));
+            client.setScreen(new MenuScreen(Text.empty(), null));
         });
     }
 

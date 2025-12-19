@@ -89,12 +89,10 @@ public class GameMessageHandler {
                 break;
             default:
                 BirbsTheodoliteClient.LOGGER.warn("Reached default case for selected Shape, reverting to default");
-                BirbsTheodoliteClient.config.getShapeConfig().setSelectedShape(Config.defaults().getShapeConfig().getSelectedShape());
+                config.getShapeConfig().setSelectedShape(Config.defaults().getShapeConfig().getSelectedShape());
                 drawBoxyRing(alpha, deltaY, player, config);
                 break;
         }
-
-
     }
 
     private void drawBoxyRing(double alpha, int deltaY, ClientPlayerEntity player, Config config) {
