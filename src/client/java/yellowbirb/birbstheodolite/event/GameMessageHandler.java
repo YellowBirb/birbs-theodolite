@@ -9,7 +9,6 @@ import yellowbirb.birbstheodolite.render.RenderManager;
 import yellowbirb.birbstheodolite.render.shapes.CircleXZ;
 import yellowbirb.birbstheodolite.render.shapes.InterCircleStrip;
 import yellowbirb.birbstheodolite.util.config.Config;
-import yellowbirb.birbstheodolite.util.config.ShapeConfig;
 
 import java.util.Optional;
 
