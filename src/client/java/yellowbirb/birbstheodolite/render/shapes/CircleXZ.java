@@ -5,6 +5,7 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.util.math.MatrixStack;
 import org.joml.Vector3f;
 import yellowbirb.birbstheodolite.render.CustomRenderPipelines;
+import yellowbirb.birbstheodolite.util.config.data.RGBA;
 
 import static java.lang.Math.*;
 
@@ -34,17 +35,16 @@ public class CircleXZ implements RenderShape{
         this.visibleThroughWalls = visibleThroughWalls;
     }
 
+    public CircleXZ(float radius, int segmentAmount, float x, float y, float z, RGBA color, boolean visibleThroughWalls) {
+        this(radius, segmentAmount, x, y, z, color.getR(), color.getG(), color.getB(), color.getA(), visibleThroughWalls);
+    }
+
     public CircleXZ(float radius, float segmentLength, float x, float y, float z, int r, int g, int b, int a, boolean visibleThroughWalls) {
-        this.radius = radius;
-        this.segmentAmount = max(8, (int) round((PI * radius * 2) / segmentLength));
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.r = r;
-        this.g = g;
-        this.b = b;
-        this.a = a;
-        this.visibleThroughWalls = visibleThroughWalls;
+        this(radius, max(8, (int) round((PI * radius * 2) / segmentLength)), x, y, z, r, g, b, a, visibleThroughWalls);
+    }
+
+    public CircleXZ(float radius, float segmentLength, float x, float y, float z, RGBA color, boolean visibleThroughWalls) {
+        this(radius, segmentLength, x, y, z, color.getR(), color.getG(), color.getB(), color.getA(), visibleThroughWalls);
     }
 
     @Override

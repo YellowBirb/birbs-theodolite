@@ -5,6 +5,7 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.util.math.MatrixStack;
 import org.joml.Vector3f;
 import yellowbirb.birbstheodolite.render.CustomRenderPipelines;
+import yellowbirb.birbstheodolite.util.config.data.RGBA;
 
 import static java.lang.Math.*;
 
@@ -36,6 +37,10 @@ public class InterCircleStrip implements RenderShape{
         this.b = b;
         this.a = a;
         this.visibleThroughWalls = visibleThroughWalls;
+    }
+
+    public InterCircleStrip(float radius1, float radius2, int segmentAmount, float x, float y1, float y2, float z, RGBA color, boolean visibleThroughWalls) {
+        this(radius1, radius2, segmentAmount, x, y1, y2, z, color.getR(), color.getG(), color.getB(), color.getA(), visibleThroughWalls);
     }
 
     @Override

@@ -2,6 +2,8 @@ package yellowbirb.birbstheodolite.util.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.apache.commons.io.FileUtils;
 import yellowbirb.birbstheodolite.BirbsTheodoliteClient;
 
@@ -29,8 +31,10 @@ public class ConfigLoader {
             writeToFile(defaults, configFile);
             return defaults;
         }
+        JsonObject jsonObject = JsonParser.parseString(json).getAsJsonObject();
+        Config.ensureCompleteKeySet(jsonObject);
         Gson gson = new Gson();
-        return gson.fromJson(json, Config.class);
+        return gson.fromJson(jsonObject, Config.class);
     }
 
     private static String getFileString(File file) {

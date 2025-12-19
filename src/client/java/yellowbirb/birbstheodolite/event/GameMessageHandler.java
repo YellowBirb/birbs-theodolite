@@ -122,18 +122,18 @@ public class GameMessageHandler {
         float lowY = playerY + deltaY - config.getMathConfig().getHeightMargin();
         float highY = playerY + deltaY + config.getMathConfig().getHeightMargin();
 
-        RenderManager.add(new CircleXZ(radius1_1, segmentAmount, playerX, highY, playerZ, 0, 255, 0, 255, true));
-        RenderManager.add(new CircleXZ(radius1_2, segmentAmount, playerX, lowY , playerZ, 0, 255, 0, 255, true));
+        RenderManager.add(new CircleXZ(radius1_1, segmentAmount, playerX, highY, playerZ, config.getShapeConfig().getBoxyRingOuterCornerColor(), config.getShapeConfig().isBoxyRingOuterCornerVisibleThroughWalls()));
+        RenderManager.add(new CircleXZ(radius1_2, segmentAmount, playerX, lowY , playerZ, config.getShapeConfig().getBoxyRingOuterCornerColor(), config.getShapeConfig().isBoxyRingOuterCornerVisibleThroughWalls()));
 
-        RenderManager.add(new CircleXZ(radius2, segmentAmount, playerX, playerY + deltaY, playerZ, 255, 0, 0, 255, true));
+        RenderManager.add(new CircleXZ(radius2, segmentAmount, playerX, playerY + deltaY, playerZ, config.getShapeConfig().getBoxyRingInnerColor(), config.getShapeConfig().isBoxyRingInnerVisibleThroughWalls()));
 
-        RenderManager.add(new CircleXZ(radius3_1, segmentAmount, playerX, highY, playerZ, 0, 255, 0, 255, true));
-        RenderManager.add(new CircleXZ(radius3_2, segmentAmount, playerX, lowY , playerZ, 0, 255, 0, 255, true));
+        RenderManager.add(new CircleXZ(radius3_1, segmentAmount, playerX, highY, playerZ, config.getShapeConfig().getBoxyRingOuterCornerColor(), config.getShapeConfig().isBoxyRingOuterCornerVisibleThroughWalls()));
+        RenderManager.add(new CircleXZ(radius3_2, segmentAmount, playerX, lowY , playerZ, config.getShapeConfig().getBoxyRingOuterCornerColor(), config.getShapeConfig().isBoxyRingOuterCornerVisibleThroughWalls()));
 
-        RenderManager.add(new InterCircleStrip(radius1_1, radius1_2, segmentAmount, playerX, highY, lowY , playerZ, 0, 255, 0, 50, true));
-        RenderManager.add(new InterCircleStrip(radius3_1, radius3_2, segmentAmount, playerX, highY, lowY , playerZ, 0, 255, 0, 50, true));
-        RenderManager.add(new InterCircleStrip(radius1_1, radius3_1, segmentAmount, playerX, highY, highY, playerZ, 0, 255, 0, 50, true));
-        RenderManager.add(new InterCircleStrip(radius1_2, radius3_2, segmentAmount, playerX, lowY , lowY , playerZ, 0, 255, 0, 50, true));
+        RenderManager.add(new InterCircleStrip(radius1_1, radius1_2, segmentAmount, playerX, highY, lowY , playerZ, config.getShapeConfig().getBoxyRingOuterPlaneColor(), config.getShapeConfig().isBoxyRingOuterPlaneVisibleThroughWalls()));
+        RenderManager.add(new InterCircleStrip(radius3_1, radius3_2, segmentAmount, playerX, highY, lowY , playerZ, config.getShapeConfig().getBoxyRingOuterPlaneColor(), config.getShapeConfig().isBoxyRingOuterPlaneVisibleThroughWalls()));
+        RenderManager.add(new InterCircleStrip(radius1_1, radius3_1, segmentAmount, playerX, highY, highY, playerZ, config.getShapeConfig().getBoxyRingOuterPlaneColor(), config.getShapeConfig().isBoxyRingOuterPlaneVisibleThroughWalls()));
+        RenderManager.add(new InterCircleStrip(radius1_2, radius3_2, segmentAmount, playerX, lowY , lowY , playerZ, config.getShapeConfig().getBoxyRingOuterPlaneColor(), config.getShapeConfig().isBoxyRingOuterPlaneVisibleThroughWalls()));
     }
 
     private void onReceivePeltRewardMessage() {
