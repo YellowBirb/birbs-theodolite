@@ -19,7 +19,10 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import yellowbirb.birbstheodolite.event.GameMessageHandler;
+import yellowbirb.birbstheodolite.gui.MenuScreen;
 import yellowbirb.birbstheodolite.render.RenderManager;
+import yellowbirb.birbstheodolite.util.config.Config;
+import yellowbirb.birbstheodolite.util.config.ConfigLoader;
 
 import java.io.IOException;
 import java.net.URI;
@@ -30,11 +33,17 @@ public class BirbsTheodoliteClient implements ClientModInitializer {
 
     public static final String MOD_ID = "birbs-theodolite";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+    public static Config config;
 
     private static final String MODRINTH_PROJECT_VERSION_API_LINK = "https://api.modrinth.com/v2/project/birbs-theodolite/version";
 
     @Override
     public void onInitializeClient() {
+
+        LOGGER.info("Birb's Theodolite is initializing");
+
+        // load config
+        config = ConfigLoader.loadFromFile();
 
         // draw stuff
         WorldRenderEvents.LAST.register(RenderManager::draw);
@@ -51,12 +60,33 @@ public class BirbsTheodoliteClient implements ClientModInitializer {
 
         // manually stop drawing stuff
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) ->
-                dispatcher.register(ClientCommandManager.literal("clearTheodolite").executes((context) -> {
+                dispatcher.register(ClientCommandManager.literal("cleartheodolite").executes((context) -> {
                     RenderManager.clear();
                     context.getSource().getPlayer().sendMessage(Text.literal("§3[Birb's Theodolite] §aCleared all Objects drawn in the World!"), false);
                     return 1;
-                }
-        )));
+                }))
+        );
+
+        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) ->
+                dispatcher.register(ClientCommandManager.literal("bt").executes((context) -> {
+                    openMenu(MinecraftClient.getInstance());
+                    return 1;
+                }))
+        );
+
+        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) ->
+                dispatcher.register(ClientCommandManager.literal("birbstheodolite").executes((context) -> {
+                    openMenu(MinecraftClient.getInstance());
+                    return 1;
+                }))
+        );
+    }
+
+    public void openMenu(MinecraftClient client) {
+        client.send(() -> {
+            System.out.println("open");
+            client.setScreen(new MenuScreen(Text.literal("aaaa"), null));
+        });
     }
 
     private void checkForUpdate() {
