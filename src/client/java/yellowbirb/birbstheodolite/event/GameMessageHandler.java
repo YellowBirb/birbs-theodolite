@@ -9,6 +9,7 @@ import yellowbirb.birbstheodolite.render.RenderManager;
 import yellowbirb.birbstheodolite.render.shapes.CircleXZ;
 import yellowbirb.birbstheodolite.render.shapes.InterCircleStrip;
 import yellowbirb.birbstheodolite.util.config.Config;
+import yellowbirb.birbstheodolite.util.config.ConfigLoader;
 
 import java.util.Optional;
 
@@ -81,7 +82,7 @@ public class GameMessageHandler {
             deltaY = -deltaY;
         }
 
-        Config config = BirbsTheodoliteClient.config;
+        Config config = ConfigLoader.config;
 
         switch (config.getShapeConfig().getSelectedShape()) {
             case BOXY_RING:

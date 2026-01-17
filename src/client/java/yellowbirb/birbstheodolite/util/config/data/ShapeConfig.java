@@ -36,7 +36,7 @@ public class ShapeConfig {
                 new RGBA(0, 255, 0, 255),
                 new RGBA(0, 255, 0, 50),
                 true,
-                false,
+                true,
                 false
         );
     }
