@@ -2,9 +2,12 @@ package yellowbirb.birbstheodolite;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientWorldEvents;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
@@ -54,28 +57,60 @@ public class BirbsTheodoliteClient implements ClientModInitializer {
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> RenderManager.clear());
         ClientWorldEvents.AFTER_CLIENT_WORLD_CHANGE.register((client, world) -> RenderManager.clear());
 
+        // open menu
+        /*
+        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) ->
+                dispatcher.register(ClientCommandManager.literal("bt").executes(context -> {
+                    openMenu(MinecraftClient.getInstance());
+                    return 1;
+                }))
+        );
+        */
+
+        // test command for drawing
+        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) ->
+                dispatcher.register(ClientCommandManager.literal("bttesttheodolite")
+                        .then(ClientCommandManager.argument("deltay", IntegerArgumentType.integer())
+                                .then(ClientCommandManager.argument("angle", IntegerArgumentType.integer())
+                                        .executes(BirbsTheodoliteClient::executeTestTheodolite))))
+        );
+
         // manually stop drawing stuff
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) ->
-                dispatcher.register(ClientCommandManager.literal("cleartheodolite").executes((context) -> {
+                dispatcher.register(ClientCommandManager.literal("btclear").executes((context) -> {
                     RenderManager.clear();
-                    context.getSource().getPlayer().sendMessage(Text.literal("§3[Birb's Theodolite] §aCleared all Objects drawn in the World!"), false);
+                    context.getSource().getPlayer().sendMessage(Text.literal("§3[Birb's Theodolite] §aCleared all objects drawn in the world"), false);
                     return 1;
                 }))
         );
 
+        // reload config from file
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) ->
-                dispatcher.register(ClientCommandManager.literal("bt").executes((context) -> {
-                    openMenu(MinecraftClient.getInstance());
+                dispatcher.register(ClientCommandManager.literal("btreloadconfig").executes((context) -> {
+                    ConfigLoader.initConfig();
+                    context.getSource().getPlayer().sendMessage(Text.literal("§3[Birb's Theodolite] §aReloaded config from file"), false);
                     return 1;
                 }))
         );
 
-        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) ->
-                dispatcher.register(ClientCommandManager.literal("birbstheodolite").executes((context) -> {
-                    openMenu(MinecraftClient.getInstance());
-                    return 1;
-                }))
-        );
+
+
+
+    }
+
+    private static int executeTestTheodolite(CommandContext<FabricClientCommandSource> context) {
+        int deltay = IntegerArgumentType.getInteger(context, "deltay");
+        int angle = IntegerArgumentType.getInteger(context, "angle");
+        GameMessageHandler.incoming(Text.literal("The target is around " + deltay + " blocks above, at a " + angle + " degrees angle!"));
+        if (deltay == 0) {
+            context.getSource().getPlayer().sendMessage(Text.literal("§3[Birb's Theodolite] §aYou are at the exact height!"), false);
+        } else if (deltay > 0) {
+            context.getSource().getPlayer().sendMessage(Text.literal("§3[Birb's Theodolite] §aThe target is around " + deltay + " blocks above, at a " + angle + " degrees angle!"), false);
+        } else {
+            context.getSource().getPlayer().sendMessage(Text.literal("§3[Birb's Theodolite] §aThe target is around " + (-deltay) + " blocks below, at a " + angle + " degrees angle!"), false);
+        }
+
+        return 1;
     }
 
     public void openMenu(MinecraftClient client) {

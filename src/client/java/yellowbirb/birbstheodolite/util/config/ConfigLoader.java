@@ -17,11 +17,11 @@ import java.util.Scanner;
 public class ConfigLoader {
 
     private static final String MOD_ID = BirbsTheodoliteClient.MOD_ID;
-    public static final File configFile = new File("./loadedConfig/" + MOD_ID + "/loadedConfig.json");
-    public static final String backupDirPath = "./loadedConfig/" + MOD_ID + "/backups";
-    public static final File backupFile1 = new File("./loadedConfig/" + MOD_ID + "/backups/backup1.json");
-    public static final File backupFile2 = new File("./loadedConfig/" + MOD_ID + "/backups/backup2.json");
-    public static final File backupFile3 = new File("./loadedConfig/" + MOD_ID + "/backups/backup3.json");
+    public static final File configFile = new File("./config/" + MOD_ID + "/config.json");
+    public static final String backupDirPath = "./config/" + MOD_ID + "/backups";
+    public static final File backupFile1 = new File("./config/" + MOD_ID + "/backups/backup1.json");
+    public static final File backupFile2 = new File("./config/" + MOD_ID + "/backups/backup2.json");
+    public static final File backupFile3 = new File("./config/" + MOD_ID + "/backups/backup3.json");
 
     public static Config config;
 
@@ -39,9 +39,8 @@ public class ConfigLoader {
         }
         JsonObject jsonObject = JsonParser.parseString(json).getAsJsonObject();
         Config.ensureCompleteKeySet(jsonObject);
-        Gson gson = new Gson();
-        Config loadedConfig = gson.fromJson(jsonObject, Config.class);
-        // TODO: writing does not work??? config.json file still does not have boxy ring colors/booleans
+        Config loadedConfig = new Gson().fromJson(jsonObject, Config.class);
+        // write in case ensureCompleteKeySet made a change
         writeToFile(loadedConfig, configFile);
         return loadedConfig;
     }
@@ -63,31 +62,32 @@ public class ConfigLoader {
                     }
                     else { // File not found, new one created
                         writeToFile(Config.defaults(), configFile);
-                        BirbsTheodoliteClient.LOGGER.info("No loadedConfig file found, created new loadedConfig file");
+                        BirbsTheodoliteClient.LOGGER.info("No config file found, created new file");
                     }
                 } catch (IOException e) {
-                    BirbsTheodoliteClient.LOGGER.error("Failed to read loadedConfig file: {}", e.getMessage());
+                    BirbsTheodoliteClient.LOGGER.error("Failed to read config file: {}", e.getMessage());
                 }
             } catch (IOException e) {
-                BirbsTheodoliteClient.LOGGER.error("Failed to create loadedConfig file: {}", e.getMessage());
+                BirbsTheodoliteClient.LOGGER.error("Failed to create config file: {}", e.getMessage());
             }
         } catch (IOException e) {
-            BirbsTheodoliteClient.LOGGER.error("Failed to create loadedConfig directories: {}", e.getMessage());
+            BirbsTheodoliteClient.LOGGER.error("Failed to create backup directories: {}", e.getMessage());
         }
 
         return "";
     }
 
+    public static void saveConfig() {
+        writeToFile(config, configFile);
+    }
+
     public static void writeToFile(Config configToSave, File file) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String jsonString = gson.toJson(configToSave);
-
         try (FileWriter writer = new FileWriter(file, false)) {
-            System.out.println("writing");
             writer.write(jsonString);
-            System.out.println("written");
         } catch (IOException e) {
-            BirbsTheodoliteClient.LOGGER.error("Failed to write loadedConfig to file: {}", e.getMessage());
+            BirbsTheodoliteClient.LOGGER.error("Failed to write config to file: {}", e.getMessage());
         }
     }
 
@@ -110,7 +110,7 @@ public class ConfigLoader {
             FileUtils.copyFile(backupFile1, backupFile2);
             FileUtils.copyFile(configFile, backupFile1);
         } catch (IOException e) {
-            BirbsTheodoliteClient.LOGGER.error("Failed to backup loadedConfig: {}", e.getMessage());
+            BirbsTheodoliteClient.LOGGER.error("Failed to backup config: {}", e.getMessage());
         }
     }
 }
