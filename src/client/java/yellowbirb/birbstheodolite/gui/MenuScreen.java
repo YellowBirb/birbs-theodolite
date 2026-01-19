@@ -1,9 +1,9 @@
 package yellowbirb.birbstheodolite.gui;
 
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import yellowbirb.birbstheodolite.BirbsTheodoliteClient;
@@ -43,7 +43,7 @@ public class MenuScreen extends Screen {
             context.fill(sidebarWidth-3, 0, sidebarWidth-2, height, 0xFF37373C);
             context.fill(sidebarWidth-2, 0, sidebarWidth, height, 0xFF56565B);
 
-            context.drawTexture(RenderLayer::getGuiTextured, Identifier.of(BirbsTheodoliteClient.MOD_ID, "icon.png"), 0, 0, 0, sidebarWidth * 0.125f, sidebarWidth, sidebarWidth, sidebarWidth, (int) b, sidebarWidth, (int) b);
+            context.drawTexture(RenderPipelines.GUI_TEXTURED, Identifier.of(BirbsTheodoliteClient.MOD_ID, "icon.png"), 0, 0, 0, sidebarWidth * 0.125f, sidebarWidth, sidebarWidth, sidebarWidth, (int) b, sidebarWidth, (int) b);
 
             if (textRenderer.getWidth("Birb's Theodolite") < sidebarWidth-6) {
                 context.drawText(this.textRenderer, "Birb's Theodolite", sidebarWidth/2 - textRenderer.getWidth("Birb's Theodolite") / 2, sidebarWidth - this.textRenderer.fontHeight - 20, 0xFFFFFFFF, false);
