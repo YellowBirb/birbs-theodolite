@@ -1,7 +1,7 @@
 package yellowbirb.birbstheodolite.render;
 
 import lombok.experimental.UtilityClass;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
 import yellowbirb.birbstheodolite.render.shapes.RenderShape;
 
 import java.util.ArrayList;

@@ -11,7 +11,7 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientWorldEvents;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
@@ -45,7 +45,7 @@ public class BirbsTheodoliteClient implements ClientModInitializer {
         ConfigLoader.initConfig();
 
         // draw stuff
-        WorldRenderEvents.LAST.register(RenderManager::draw);
+        WorldRenderEvents.END_MAIN.register(RenderManager::draw);
 
         // Listen to Messages sent by the server
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> GameMessageHandler.incoming(message));

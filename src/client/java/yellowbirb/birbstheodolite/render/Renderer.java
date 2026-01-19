@@ -7,7 +7,7 @@ import com.mojang.blaze3d.systems.RenderPass;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import lombok.experimental.UtilityClass;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.ScissorState;
 import net.minecraft.client.render.BufferBuilder;
@@ -16,6 +16,7 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.util.BufferAllocator;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Vec3d;
+import org.joml.Vector3f;
 import org.joml.Vector4f;
 import yellowbirb.birbstheodolite.BirbsTheodoliteClient;
 import yellowbirb.birbstheodolite.render.shapes.RenderShape;
@@ -29,8 +30,8 @@ public class Renderer {
     private static final BufferAllocator allocator = new BufferAllocator(RenderLayer.CUTOUT_BUFFER_SIZE);
 
     public void drawShape(WorldRenderContext ctx, RenderShape shape) {
-        MatrixStack matrices = ctx.matrixStack();
-        Vec3d cam = ctx.camera().getPos();
+        MatrixStack matrices = ctx.matrices();
+        Vec3d cam = ctx.worldState().cameraRenderState.pos;
 
         assert matrices != null;
         matrices.push();
@@ -66,7 +67,7 @@ public class Renderer {
         float lineWidth = 1f;
 
         GpuBufferSlice dynamicTransforms = RenderSystem.getDynamicUniforms()
-                .write(RenderSystem.getModelViewMatrix(), new Vector4f(1f, 1f, 1f, 1f), RenderSystem.getModelOffset(), RenderSystem.getTextureMatrix(), lineWidth);
+                .write(RenderSystem.getModelViewMatrix(), new Vector4f(1f, 1f, 1f, 1f), new Vector3f(), RenderSystem.getTextureMatrix(), lineWidth);
 
         try (RenderPass renderPass = RenderSystem.getDevice()
                 .createCommandEncoder()
@@ -75,8 +76,8 @@ public class Renderer {
             renderPass.setPipeline(pipeline);
 
             ScissorState scissorState = RenderSystem.getScissorStateForRenderTypeDraws();
-            if (scissorState.method_72091()) {
-                renderPass.enableScissor(scissorState.method_72092(), scissorState.method_72093(), scissorState.method_72094(), scissorState.method_72095());
+            if (scissorState.isEnabled()) {
+                renderPass.enableScissor(scissorState.getX(), scissorState.getY(), scissorState.getWidth(), scissorState.getHeight());
             }
 
             RenderSystem.bindDefaultUniforms(renderPass);
