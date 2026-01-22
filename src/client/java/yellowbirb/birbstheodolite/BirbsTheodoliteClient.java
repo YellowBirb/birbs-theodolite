@@ -30,11 +30,13 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class BirbsTheodoliteClient implements ClientModInitializer {
 
     public static final String MOD_ID = "birbs-theodolite";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+    private static final AtomicBoolean lookedForUpdate = new AtomicBoolean(false);
 
     private static final String MODRINTH_PROJECT_VERSION_API_LINK = "https://api.modrinth.com/v2/project/birbs-theodolite/version";
 
@@ -51,7 +53,12 @@ public class BirbsTheodoliteClient implements ClientModInitializer {
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> GameMessageHandler.incoming(message));
 
         // check for updates when joining a server
-        ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> checkForUpdate());
+        ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> new Thread(() -> {
+            if (!lookedForUpdate.get()) {
+                lookedForUpdate.set(true);
+                checkForUpdate();
+            }
+        }).start());
 
         // stop drawing stuff when leaving the lobby
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> RenderManager.clear());
