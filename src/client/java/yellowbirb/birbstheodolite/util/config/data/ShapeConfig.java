@@ -12,6 +12,8 @@ public class ShapeConfig {
 
     private Shape selectedShape;
 
+    // TODO: lineWidth
+
     private RGBA boxyRingInnerColor;
     private RGBA boxyRingOuterCornerColor;
     private RGBA boxyRingOuterPlaneColor;
